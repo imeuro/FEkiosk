@@ -38,7 +38,7 @@ ul.asidemenu {
     margin: 3px 0;
     border-radius: 20px 0 0 20px;
     box-sizing: border-box;
-    font: 15px/18px 'Montserrat';
+    font: 15px/18px 'Red Hat Display';
     font-weight: 700;
     color: #2f323e;
     text-transform: uppercase;
@@ -62,7 +62,7 @@ ul.asidemenu {
     padding: 40px;
     box-sizing: border-box;
     color: #f8f8f8;
-    font-family: 'Montserrat',sans serif;
+    font-family: 'Red Hat Display',sans serif;
 }
 #clock {
 	position: absolute;
@@ -74,10 +74,55 @@ ul.asidemenu {
     color: #f8f8f8;
 }
 #time h1 {
-	font-weight: 700;
-	font: 90px/64px 'Montserrat',sans serif;	
+	font: 700 90px/64px 'Red Hat Display',sans serif;	
 }
 #time span {
-	font-weight: 400;
-	font: 24px/36px 'Montserrat',sans serif;	
+	font: 400 24px/36px 'Red Hat Display',sans serif;	
+}
+
+/* GENERICO SCHEDE */
+.FEtitle {
+	font: 900 36px/48px 'Red Hat Display',sans serif;
+}
+
+
+/* SCHEDA PRESENZE */
+#presenze .today-pres {
+    margin: 40px auto;
+    width: 100%;
+}
+#presenze .today-pres-sviluppatore {
+    margin: 0 auto;
+    padding: 15px 35px 15px 15px;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    font-size: 20px;
+    line-height: 30px;
+    justify-content: space-between;
+    background: #ffffff00;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+#presenze .today-pres-sviluppatore:nth-child(odd) {
+    background: #ffffff11;
+}
+#presenze .today-pres-name {
+	font-weight: 900
+}
+#presenze .today-pres-status:after {
+	content: '';
+    background: #8BC34A;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    position: relative;
+    top: 6px;
+    left: 15px;
+    border-radius: 50%;
+    border: 3px solid #DCEDC8;
+}
+#presenze .today-pres-status.today-pres-assente:after {
+	background: #F44336;
+	border: 3px solid #FFCDD2;
 }

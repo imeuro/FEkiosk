@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover">
 	<title>FE Kiosk</title>
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Playfair+Display&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Red+Hat+Display:400,700,900&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="assets/css/fekiosk.css">
 </head>
 <body>
@@ -16,6 +16,7 @@
 	<div id="FEcontainer"></div>
 
 	<script type="text/javascript" src="assets/js/fekiosk.js"></script>
+	<script type="text/javascript" src="assets/js/preloader.js"></script>
 </body>
 </html>
 
