@@ -86,12 +86,13 @@ ul.asidemenu {
 }
 
 
+
 /* SCHEDA PRESENZE */
-#presenze .today-pres {
+#presenze .Presenze {
     margin: 40px auto;
     width: 100%;
 }
-#presenze .today-pres-sviluppatore {
+#presenze .Presenze-sviluppatore {
     margin: 0 auto;
     padding: 15px 35px 15px 15px;
     width: 100%;
@@ -104,13 +105,13 @@ ul.asidemenu {
     box-sizing: border-box;
     border-radius: 7px;
 }
-#presenze .today-pres-sviluppatore:nth-child(odd) {
+#presenze .Presenze-sviluppatore:nth-child(odd) {
     background: #ffffff11;
 }
-#presenze .today-pres-name {
+#presenze .Presenze-name {
 	font-weight: 900
 }
-#presenze .today-pres-status:after {
+#presenze .Presenze-status:after {
 	content: '';
     background: #8BC34A;
     width: 20px;
@@ -122,7 +123,40 @@ ul.asidemenu {
     border-radius: 50%;
     border: 3px solid #DCEDC8;
 }
-#presenze .today-pres-status.today-pres-assente:after {
+#presenze .Presenze-status.Presenze-assente:after {
 	background: #F44336;
 	border: 3px solid #FFCDD2;
+}
+
+/* SCHEDA MENSA */
+#mensa #DOW {
+	font: 400 36px/48px 'Red Hat Display',sans serif;
+}
+#mensa .Mensa {
+    margin: 40px auto;
+    width: 100%;
+}
+#mensa .Mensa > li {
+	display: flex;
+    flex-flow: row wrap;
+}
+#mensa .Mensa-portata {
+    margin: 5px 1.5%;
+    padding: 15px 15px 15px 15px;
+    width: 30%;
+    display: flex;
+    flex-flow: row nowrap;
+    font-size: 20px;
+    justify-content: space-between;
+    background: #ffffff11;
+    box-sizing: border-box;
+    border-radius: 7px;
+}
+#mensa .Mensa-name {
+	font-weight: 900
+}
+#mensa .Mensa-foto img {
+    max-height: 100px;
+    float: left;
+    border-radius: 7px;
 }

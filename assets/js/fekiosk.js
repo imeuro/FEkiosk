@@ -1,46 +1,32 @@
 let loadblock = (targetDiv,blockUrl,interval) => {
-	fetch(blockUrl).then(
-		(response) => {
-			return response.text();
-		}).then((blockcontent) => {
-			document.getElementById(targetDiv).innerHTML = blockcontent;
-		}).catch((error) => {
-			console.debug('Error:', error);
-		});
-	setInterval(function(){
-		fetch(blockUrl).then(
-		(response) => {
-			return response.text();
-		}).then((blockcontent) => {
-			document.getElementById(targetDiv).innerHTML = blockcontent;
-		}).catch((error) => {
-			console.debug('Error:', error);
-		});
-		console.debug('block '+blockUrl+' loaded.');
-	}, interval*60*1000);
-
+	fetch(blockUrl).then((response) => {
+		return response.text();
+	}).then((blockcontent) => {
+		document.getElementById(targetDiv).innerHTML = blockcontent;
+	}).catch((error) => {
+		console.debug('Error:', error);
+	});
 }
 
 
-// main content: rotates content every X mins
+// main content: rotates content every X seconds (var interval)
 var s = document.getElementById("FEcontainer");
-let rebootURL = ["blocks/firstboot.php",'Start',5];
+let rebootURL = ["blocks/firstboot.php",'Start'];
 
-let URLlist = [ // URL, voce a menu, secondi permanenza
-	["blocks/presenze.php",'Presenze',300],
-	["blocks/currentIP.php",'current IP',15],
-	["blocks/mensa.php",'Mensa',15],
-	["/info.php",'Test Page',15],
+let URLlist = [ // URL, voce a menu
+	["blocks/presenze.php",'Presenze'],
+	// ["blocks/currentIP.php",'current IP'],
+	["blocks/mensa.php",'Mensa'],
+	// ["/info.php",'Test Page'],
 ];
 let slength = URLlist.length;
 let i = 0;
-var interval = rebootURL[2]*1000
+var interval = 60*1000; // millis... 5mins: 5*60*1000
 let menuitems = null;
 
 
 
-// fetch(rebootURL[0]).then(
-// 	(response) => {
+// fetch(rebootURL[0]).then((response) => {
 // 		return response.text();
 // 	}).then((URLcontent) => {
 // 		s.innerHTML = URLcontent;
@@ -49,35 +35,40 @@ let menuitems = null;
 // 	});
 
 setInterval(function () {
-	console.debug(i+' - scheda: '+URLlist[i][1]);
-	if (i===0) {
-		interval = rebootURL[2]*1000 // prima slide
-	} else if (i == slength-1) {
+	 if (i == slength) {
 		console.debug('reached end. restarting!');
-		interval = URLlist[slength-1][2]*1000;
 		menuitems[slength-1].classList.add('current');
 		i=0;
-	} else {
-		interval = URLlist[i][2]*1000;
 	}
+	console.debug(i+' - scheda: '+URLlist[i][1]);
 	fetch(URLlist[i][0],{cache: 'no-cache'}).then((response) => {
 		return response.text();
 	}).then((URLcontent) => {
 		console.debug('url: '+URLlist[i][0]+' - time: '+interval);
 		s.innerHTML = URLcontent;
 
-
 		if ( URLlist[i][1] == "Presenze") {
-				console.debug('loaded');
 
 			if (checkLSData('Presenze') === true) {
-				getLSData('https://wrapapi.com/use/meuro/fekiosk/FEpresenze/0.0.1?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH','Presenze');
+				getLSData('Presenze');
 			} else {
 				loadExtData('https://wrapapi.com/use/meuro/fekiosk/FEpresenze/0.0.1?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH','Presenze',3);
-				getLSData('https://wrapapi.com/use/meuro/fekiosk/FEpresenze/0.0.1?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH','Presenze');
+				getLSData('Presenze');
+			}
+
+		} else if ( URLlist[i][1] == "Mensa") {
+
+			if (checkLSData('Mensa') === true) {
+				getLSData('Mensa');
+
+			} else {
+				loadExtData('https://wrapapi.com/use/quetz82/pellegrini/menu_linea/0.0.1?wrapAPIKey=8iOtqFcQ0YdtspWymuhzgq2yj7AGTZDt','Mensa',3);
+				getLSData('Mensa');
 			}
 
 		}
+
+
 
 
 		Array.from(menuitems).forEach(function(el){
@@ -94,8 +85,9 @@ setInterval(function () {
 
 		
 	
-}, interval); // 5mins: 5*60*1000
+}, interval);
 
+	
 
 // aside menu
 let asidemenu = '<ul class="asidemenu">';
