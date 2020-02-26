@@ -67,8 +67,8 @@ let getLSData = (LSname) => {
 	let LScontent = JSON.parse(localStorage.getItem(LSname));
 
 	if (LScontent) {
-		console.debug(curtime);
-		console.debug(LScontent.exptime);
+		// console.debug(curtime);
+		// console.debug(LScontent.exptime);
 		let target = document.querySelector('.'+LSname);
 
 		let containerli = document.createElement("li");
@@ -123,6 +123,9 @@ let getLSData = (LSname) => {
 
 				printDOW();
 			});
+		} else if(LSname == 'Jira') {
+			
+			
 		}
 		return true;
 	}

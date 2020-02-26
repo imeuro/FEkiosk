@@ -84,7 +84,9 @@ ul.asidemenu {
 .FEtitle {
 	font: 900 36px/48px 'Red Hat Display',sans serif;
 }
-
+.FEsubtitle {
+	font: 400 36px/48px 'Red Hat Display',sans serif;
+}
 
 
 /* SCHEDA PRESENZE */
@@ -129,9 +131,6 @@ ul.asidemenu {
 }
 
 /* SCHEDA MENSA */
-#mensa #DOW {
-	font: 400 36px/48px 'Red Hat Display',sans serif;
-}
 #mensa .Mensa {
     margin: 40px auto;
     width: 100%;
@@ -139,11 +138,12 @@ ul.asidemenu {
 #mensa .Mensa > li {
 	display: flex;
     flex-flow: row wrap;
+    justify-content: space-between;
 }
 #mensa .Mensa-portata {
-    margin: 5px 1.5%;
+    margin: 3px 0;
     padding: 15px 15px 15px 15px;
-    width: 30%;
+    width: 33%;
     display: flex;
     flex-flow: row nowrap;
     font-size: 20px;

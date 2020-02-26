@@ -15,13 +15,13 @@ let rebootURL = ["blocks/firstboot.php",'Start'];
 
 let URLlist = [ // URL, voce a menu
 	["blocks/presenze.php",'Presenze'],
-	// ["blocks/currentIP.php",'current IP'],
+	["blocks/jira.php",'Jira'],
 	["blocks/mensa.php",'Mensa'],
 	// ["/info.php",'Test Page'],
 ];
 let slength = URLlist.length;
 let i = 0;
-var interval = 60*1000; // millis... 5mins: 5*60*1000
+var interval = 10*1000; // millis... 5mins: 5*60*1000
 let menuitems = null;
 
 
@@ -41,13 +41,13 @@ setInterval(function () {
 		i=0;
 	}
 	console.debug(i+' - scheda: '+URLlist[i][1]);
-	fetch(URLlist[i][0],{cache: 'no-cache'}).then((response) => {
+	fetch(URLlist[i][0],{cache: 'no-cache',}).then((response) => {
 		return response.text();
 	}).then((URLcontent) => {
 		console.debug('url: '+URLlist[i][0]+' - time: '+interval);
 		s.innerHTML = URLcontent;
 
-		if ( URLlist[i][1] == "Presenze") {
+		if ( URLlist[i][1] == "Presenze" ) {
 
 			if (checkLSData('Presenze') === true) {
 				getLSData('Presenze');
@@ -56,7 +56,7 @@ setInterval(function () {
 				getLSData('Presenze');
 			}
 
-		} else if ( URLlist[i][1] == "Mensa") {
+		} else if ( URLlist[i][1] == "Mensa" ) {
 
 			if (checkLSData('Mensa') === true) {
 				getLSData('Mensa');
@@ -66,9 +66,15 @@ setInterval(function () {
 				getLSData('Mensa');
 			}
 
+		} else if ( URLlist[i][1] == "Jira" ) {
+			if (checkLSData('Jira') === true) {
+				getLSData('Jira');
+
+			} else {
+				loadExtData('https://wrapapi.com/use/meuro/fekiosk/Jira/0.0.1?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH','Jira',1);
+				getLSData('Jira');
+			}
 		}
-
-
 
 
 		Array.from(menuitems).forEach(function(el){
@@ -80,10 +86,6 @@ setInterval(function () {
 	}).catch((error) => {
 		console.debug('Error:', error);
 	});
-
-
-
-		
 	
 }, interval);
 
