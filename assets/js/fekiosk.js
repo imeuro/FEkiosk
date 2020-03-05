@@ -1,81 +1,62 @@
-let loadblock = (targetDiv,blockUrl,interval) => {
-	fetch(blockUrl).then((response) => {
-		return response.text();
-	}).then((blockcontent) => {
-		document.getElementById(targetDiv).innerHTML = blockcontent;
-	}).catch((error) => {
-		console.debug('Error:', error);
-	});
-}
-
-
-// main content: rotates content every X seconds (var interval)
-var s = document.getElementById("FEcontainer");
+// global vars
 let rebootURL = ["blocks/firstboot.php",'Start'];
-
-let URLlist = [ // URL, voce a menu
-	["blocks/presenze.php",'Presenze'],
-	["blocks/jira.php",'Jira'],
-	["blocks/mensa.php",'Mensa'],
-	// ["/info.php",'Test Page'],
+let URLlist = [ // URL, voce a menu, sorgente dati, durata localStorage
+	{
+		'uri'		: "blocks/presenze.php",
+		'name' 		: "Presenze",
+		'source' 	: "https://wrapapi.com/use/meuro/fekiosk/FEpresenze/latest?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH",
+		'duration' 	: 3
+	},
+	{
+		'uri' 		: "blocks/jira.php",
+		'name' 		: "Jira",
+		'source' 	: "https://wrapapi.com/use/meuro/fekiosk/Jira/latest?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH",
+		'duration' 	: 1
+	},
+	{
+		'uri' 		: "blocks/mensa.php",
+		'name' 		: "Mensa",
+		'source' 	: "https://wrapapi.com/use/quetz82/pellegrini/menu_linea/latest?wrapAPIKey=8iOtqFcQ0YdtspWymuhzgq2yj7AGTZDt",
+		'duration' 	: 6
+	}
 ];
-let slength = URLlist.length;
+let Ulen = URLlist.length;
+var s = document.getElementById("FEcontainer");
 let i = 0;
 var interval = 10*1000; // millis... 5mins: 5*60*1000
 let menuitems = null;
 
 
 
-// fetch(rebootURL[0]).then((response) => {
-// 		return response.text();
-// 	}).then((URLcontent) => {
-// 		s.innerHTML = URLcontent;
-// 	}).catch((error) => {
-// 		console.debug('Error:', error);
-// 	});
-
-setInterval(function () {
-	 if (i == slength) {
-		console.debug('reached end. restarting!');
-		menuitems[slength-1].classList.add('current');
-		i=0;
-	}
-	console.debug(i+' - scheda: '+URLlist[i][1]);
-	fetch(URLlist[i][0],{cache: 'no-cache',}).then((response) => {
+fetch(rebootURL[0]).then((response) => {
 		return response.text();
 	}).then((URLcontent) => {
-		console.debug('url: '+URLlist[i][0]+' - time: '+interval);
+		s.innerHTML = URLcontent;
+		initialChecks();
+	}).catch((error) => {
+		console.debug('Error:', error);
+	});
+
+
+setInterval(function () {
+	 if (i == Ulen) {
+		console.debug('reached end. restarting!');
+		menuitems[Ulen-1].classList.add('current');
+		i=0;
+	}
+	console.debug(i+' - scheda: '+URLlist[i]['name']);
+	fetch(URLlist[i]['uri'],{cache: 'no-cache',}).then((response) => {
+		return response.text();
+	}).then((URLcontent) => {
+		console.debug('url: '+URLlist[i]['uri']+' - time: '+interval);
 		s.innerHTML = URLcontent;
 
-		if ( URLlist[i][1] == "Presenze" ) {
-
-			if (checkLSData('Presenze') === true) {
-				getLSData('Presenze');
-			} else {
-				loadExtData('https://wrapapi.com/use/meuro/fekiosk/FEpresenze/0.0.1?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH','Presenze',3);
-				getLSData('Presenze');
-			}
-
-		} else if ( URLlist[i][1] == "Mensa" ) {
-
-			if (checkLSData('Mensa') === true) {
-				getLSData('Mensa');
-
-			} else {
-				loadExtData('https://wrapapi.com/use/quetz82/pellegrini/menu_linea/0.0.1?wrapAPIKey=8iOtqFcQ0YdtspWymuhzgq2yj7AGTZDt','Mensa',3);
-				getLSData('Mensa');
-			}
-
-		} else if ( URLlist[i][1] == "Jira" ) {
-			if (checkLSData('Jira') === true) {
-				getLSData('Jira');
-
-			} else {
-				loadExtData('https://wrapapi.com/use/meuro/fekiosk/Jira/0.0.1?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH','Jira',1);
-				getLSData('Jira');
-			}
+		if (checkLSData(URLlist[i]['name']) === true) {
+			getLSData(URLlist[i]['name']);
+		} else {
+			loadExtData(URLlist[i]['source'],URLlist[i]['name'],URLlist[i]['duration']);
+			getLSData(URLlist[i]['name']);
 		}
-
 
 		Array.from(menuitems).forEach(function(el){
 			el.classList.remove('current');
@@ -89,17 +70,39 @@ setInterval(function () {
 	
 }, interval);
 
-	
 
 // aside menu
 let asidemenu = '<ul class="asidemenu">';
 asidemenu = asidemenu+'<li>'+rebootURL[1]+'</li>';
 URLlist.forEach(function(item,el){
-	asidemenu = asidemenu+'<li>'+item[1]+'</li>';
+	asidemenu = asidemenu+'<li>'+item['name']+'</li>';
 });
 asidemenu = asidemenu+'</ul>';
 document.getElementById('paginator').innerHTML = asidemenu;
 menuitems = document.querySelectorAll('.asidemenu li');
+
+
+
+
+let loadblock = (targetDiv,blockUrl,interval) => {
+	fetch(blockUrl).then((response) => {
+		return response.text();
+	}).then((blockcontent) => {
+		document.getElementById(targetDiv).innerHTML = blockcontent;
+	}).catch((error) => {
+		console.debug('Error:', error);
+	});
+
+	setInterval(function () {
+		fetch(blockUrl).then((response) => {
+			return response.text();
+		}).then((blockcontent) => {
+			document.getElementById(targetDiv).innerHTML = blockcontent;
+		}).catch((error) => {
+			console.debug('Error:', error);
+		});
+	}, interval*60*1000);
+}
 
 document.addEventListener("DOMContentLoaded", function() {
 	loadblock('clock','./blocks/clock.php',1);

@@ -1,5 +1,22 @@
 let curtime = Date.now();
 
+// initial checks (firstboot page):
+let initialChecks = () => {
+	URLlist.forEach(function(item,el) {
+
+		if (checkLSData(item['name']) === false) {
+			loadExtData(item['source'],item['name'],item['duration']);
+			console.debug('initialChecks '+item['name']+': false');
+
+		} else {
+			console.debug('initialChecks '+item['name']+': true');
+			document.querySelector('#'+item['name']+' span').innerText = 'data already good.';
+		}
+	});
+	
+}
+
+
 // checks if there's already a Localstorage item named LSname
 let checkLSData = (LSname) => {
 	let LScontent = JSON.parse(localStorage.getItem(LSname));
@@ -7,6 +24,9 @@ let checkLSData = (LSname) => {
 	if (LScontent) {
 		if(curtime < LScontent.exptime) {
 			return true;
+		} else {
+			localStorage.removeItem(LSname)
+			return false;
 		}
 	}
 
@@ -36,19 +56,19 @@ let loadExtData = (Furl,LSname,Delayhrs=3) => {
 	}).then((URLcontent) => {
 		//console.debug(URLcontent.data);
 
-		// if (LSname == 'Presenze') {
-			let LSdata = {
-				data: URLcontent.data,
-				exptime: exptime,
-			}
-			// set Localstorage
-			localStorage.setItem(LSname, JSON.stringify(LSdata));
-			if (checker){
-				document.querySelector('#'+LSname+' span').innerText = 'OK';
-			}
-		// }
+		let LSdata = {
+			data: URLcontent.data,
+			exptime: exptime,
+		}
+		// set Localstorage
+		localStorage.setItem(LSname, JSON.stringify(LSdata));
+		if (checker){
+			document.querySelector('#'+LSname+' span').innerText = 'data updated.';
+		} else {
+			getLSData(LSname);
+		}
 
-		getLSData(LSname);
+		
 
 	}).catch((error) => {
 		console.debug('Error:', error);
@@ -95,7 +115,7 @@ let getLSData = (LSname) => {
 		} else if(LSname == 'Mensa') {
 			let d = new Date();
 			let DOW = d.getDay();
-			if (d.getUTCHours() >= 14 ) {
+			if (d.getUTCHours() >= 14 ) { // dopo le 14 mostro quelli di domani
 				DOW = d.getDay()+1;
 			}
 			Array.from(LScontent.data.Piatti).forEach(function(item,el){
@@ -124,7 +144,28 @@ let getLSData = (LSname) => {
 				printDOW();
 			});
 		} else if(LSname == 'Jira') {
-			
+			Array.from(LScontent.data.output.issues).forEach(function(item,el){
+				let containerul = document.createElement("ul");
+				containerul.setAttribute('class', LSname+'-issue');
+				
+
+				let KEYli = document.createElement("li");
+				KEYli.setAttribute('class', LSname+'-issue-key');
+				KEYli.appendChild(document.createTextNode(LScontent.data.output.issues[el].key));
+				let SUMli = document.createElement("li");
+				SUMli.setAttribute('class', LSname+'-issue-summary');
+				SUMli.appendChild(document.createTextNode(LScontent.data.output.issues[el].fields.summary));
+				let PRIOli = document.createElement("li");
+				PRIOli.setAttribute('class', LSname+'-issue-priority');
+				let PRIOpic = document.createElement('img');
+				PRIOpic.setAttribute('src',LScontent.data.output.issues[el].fields.priority.iconUrl);
+				PRIOli.appendChild(PRIOpic);
+
+				document.querySelectorAll('.'+LSname+' li')[0].appendChild(containerul).appendChild(PRIOli);
+				document.querySelectorAll('.'+LSname+' li')[0].appendChild(containerul).appendChild(KEYli);
+				document.querySelectorAll('.'+LSname+' li')[0].appendChild(containerul).appendChild(SUMli);
+				
+			});
 			
 		}
 		return true;
