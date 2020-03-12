@@ -73,10 +73,10 @@ ul.asidemenu {
     text-align: center;
     color: #f8f8f8;
 }
-#time h1 {
+#clock h1 {
 	font: 700 90px/64px 'Red Hat Display',sans serif;	
 }
-#time span {
+#clock span {
 	font: 400 24px/36px 'Red Hat Display',sans serif;	
 }
 

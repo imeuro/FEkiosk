@@ -1,20 +1,20 @@
 // global vars
-let rebootURL = ["blocks/firstboot.php",'Start'];
+let rebootURL = ["blocks/firstboot.html",'Start'];
 let URLlist = [ // URL, voce a menu, sorgente dati, durata localStorage
 	{
-		'uri'		: "blocks/presenze.php",
+		'uri'		: "blocks/presenze.html",
 		'name' 		: "Presenze",
 		'source' 	: "https://wrapapi.com/use/meuro/fekiosk/FEpresenze/latest?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH",
 		'duration' 	: 3
 	},
 	{
-		'uri' 		: "blocks/jira.php",
+		'uri' 		: "blocks/jira.html",
 		'name' 		: "Jira",
 		'source' 	: "https://wrapapi.com/use/meuro/fekiosk/Jira/latest?wrapAPIKey=UCmyH6A9ybca3cojcz8O4oQgP4icziFH",
 		'duration' 	: 1
 	},
 	{
-		'uri' 		: "blocks/mensa.php",
+		'uri' 		: "blocks/mensa.html",
 		'name' 		: "Mensa",
 		'source' 	: "https://wrapapi.com/use/quetz82/pellegrini/menu_linea/latest?wrapAPIKey=8iOtqFcQ0YdtspWymuhzgq2yj7AGTZDt",
 		'duration' 	: 6
@@ -82,30 +82,41 @@ document.getElementById('paginator').innerHTML = asidemenu;
 menuitems = document.querySelectorAll('.asidemenu li');
 
 
+var date = new Date(parseInt(Date.now()));
+let hhmm = (ts) => {
+  return date.toLocaleTimeString(navigator.language, {
+    hour: '2-digit',
+    minute:'2-digit'
+  });
+}
+let ddmm = (ts) => {
+  return date.toLocaleTimeString(navigator.language, {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+}
+let DOMclockdate = () => {
+	let hhmmtarget = document.getElementById("clock");
 
+	let hhmmDOM = document.createElement("H1");
+	let hhmmtext = document.createTextNode(hhmm(Date.now()));
+	hhmmDOM.appendChild(hhmmtext);
 
-let loadblock = (targetDiv,blockUrl,interval) => {
-	fetch(blockUrl).then((response) => {
-		return response.text();
-	}).then((blockcontent) => {
-		document.getElementById(targetDiv).innerHTML = blockcontent;
-	}).catch((error) => {
-		console.debug('Error:', error);
-	});
+	let ddmmDOM = document.createElement("span");
+	let ddmmtext = document.createTextNode(ddmm(Date.now()));
+	ddmmDOM.appendChild(ddmmtext);
 
-	setInterval(function () {
-		fetch(blockUrl).then((response) => {
-			return response.text();
-		}).then((blockcontent) => {
-			document.getElementById(targetDiv).innerHTML = blockcontent;
-		}).catch((error) => {
-			console.debug('Error:', error);
-		});
-	}, interval*60*1000);
+	hhmmtarget.innerHTML='';
+	hhmmtarget.appendChild(hhmmDOM);
+	hhmmtarget.appendChild(ddmmDOM)
 }
 
+
 document.addEventListener("DOMContentLoaded", function() {
-	loadblock('clock','./blocks/clock.php',1);
+	// loadblock('clock','./blocks/clock.html',1);
+	DOMclockdate();
+	setInterval(function () { DOMclockdate(); }, 30*1000);
 });
 
 
